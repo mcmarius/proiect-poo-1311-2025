@@ -51,6 +51,12 @@ public:
           salariu(salariu) {
         std::cout << "constr init profesor: " << nume << std::endl;
     }
+
+    friend std::ostream & operator<<(std::ostream &os, const Profesor &obj) {
+        return os
+               << "nume: " << obj.nume
+               << " salariu: " << obj.salariu;
+    }
 };
 
 class Facultate {
@@ -70,6 +76,20 @@ public:
           studenti(studenti),
           profi(profi) {
     }
+
+    friend std::ostream & operator<<(std::ostream &os, const Facultate &obj) {
+        os
+               << "nume: " << obj.nume
+               << "\nstudenti: ";
+        for (const auto& student : obj.studenti) {
+            os << student << ", ";
+        }
+               os << "\nprofi: ";
+        for (const auto& prof : obj.profi)
+            os << prof << ", ";
+        os << std::endl;
+        return os;
+    }
 };
 
 std::ostream& operator<<(std::ostream& os, const Student& student) {
@@ -80,12 +100,14 @@ std::ostream& operator<<(std::ostream& os, const Student& student) {
 int main() {
 
     Student st1{"abc", 131, true}, st2(st1), st3(st2);
+    Profesor p1("abc", 1);
+    Facultate f1("fmi", {st1}, {p1});
     //st1 = st2 = st3;
     //st1.operator=(st2.operator=(st3));
     std::cout << "Ce frumos e afară când nu sunt bormașini!\n";
     operator<<(std::cout, "Ce \"frumos\" e C++...\n");
     // (std::cout << st1) << st2;
-    std::cout << st1 << st2;
+    std::cout << st1 << st2 << f1;
     operator<<(operator<<(std::cout, st1), st2);
     std::array<int, 100> v{};
     int nr;
