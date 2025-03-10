@@ -52,7 +52,7 @@ public:
         std::cout << "constr init profesor: " << nume << std::endl;
     }
 
-    friend std::ostream & operator<<(std::ostream &os, const Profesor &obj) {
+    friend std::ostream &operator<<(std::ostream &os, const Profesor &obj) {
         return os
                << "nume: " << obj.nume
                << " salariu: " << obj.salariu;
@@ -77,15 +77,13 @@ public:
           profi(profi) {
     }
 
-    friend std::ostream & operator<<(std::ostream &os, const Facultate &obj) {
-        os
-               << "nume: " << obj.nume
-               << "\nstudenti: ";
-        for (const auto& student : obj.studenti) {
+    friend std::ostream &operator<<(std::ostream &os, const Facultate &obj) {
+        os << "nume: " << obj.nume << "\nstudenti: ";
+        for (const auto &student: obj.studenti) {
             os << student << ", ";
         }
-               os << "\nprofi: ";
-        for (const auto& prof : obj.profi)
+        os << "\nprofi: ";
+        for (const auto &prof: obj.profi)
             os << prof << ", ";
         os << std::endl;
         return os;
