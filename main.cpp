@@ -4,7 +4,7 @@
 #include <Helper.h>
 
 int main() {
-    std::cout << "Ce frumos e afară!\n";
+    std::cout << "Ce frumos e afară când nu sunt bormașini!\n";
     std::array<int, 100> v{};
     int nr;
     std::cout << "Introduceți nr: ";
