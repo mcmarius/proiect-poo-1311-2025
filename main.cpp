@@ -37,6 +37,7 @@ public:
         return *this;
     }
     friend std::ostream& operator<<(std::ostream& os, const Student& student);
+
     void invata() {
         std::cout << "invata student: " << nume << std::endl;
     }
@@ -44,14 +45,20 @@ public:
 
 class StudentLicenta : public Student {
 public:
-    StudentLicenta(std::string nume, int an) : Student(nume, an, true) {}
-    void distreaza() {}
+    StudentLicenta(const std::string &nume, int an) : Student(nume, an, true) {
+    }
+
+    void distreaza() {
+    }
 };
 
 class StudentMaster : public Student {
 public:
-    StudentMaster(std::string nume, int an) : Student(nume, an, false) {}
-    void lucreaza() {}
+    StudentMaster(const std::string &nume, int an) : Student(nume, an, false) {
+    }
+
+    void lucreaza() {
+    }
 };
 
 class Profesor {
@@ -112,13 +119,15 @@ class Baza {
     int *ptr;
     int q = 1;
     std::string abc = "abc";
-public:
-    virtual void afis(std::ostream & os) const {}
 
-    friend std::ostream & operator<<(std::ostream &os, const Baza &obj) {
+public:
+    virtual void afis(std::ostream &) const {
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Baza &obj) {
         os
-               << "q: " << obj.q
-               << " abc: " << obj.abc << "\n";
+                << "q: " << obj.q
+                << " abc: " << obj.abc << "\n";
         obj.afis(os);
         return os;
     }
@@ -127,23 +136,30 @@ public:
         std::cout << "destructor baza: " << std::endl;
         delete ptr;
     }
+
     void f_ok() {
         f_baza();
         g();
         f();
     }
+
     virtual void f() = 0;
+
     Baza() {
         std::cout << "constr baza" << std::endl;
         ptr = new int;
     }
+
 protected:
     Baza(const Baza &other) = default;
-    Baza& operator=(const Baza &other) = default;
+
+    Baza &operator=(const Baza &other) = default;
+
 private:
     void f_baza() {
         std::cout << "f baza" << std::endl;
     }
+
     void g() {
         std::cout << "g baza" << std::endl;
     }
@@ -152,8 +168,9 @@ private:
 class Derivata1 : public Baza {
     int *ptr2;
     int d1 = 3;
+
 public:
-    void afis(std::ostream & os) const override {
+    void afis(std::ostream &os) const override {
         os << " d1: " << d1 << "\n";
     }
 
@@ -161,42 +178,50 @@ public:
         ptr2 = new int;
         std::cout << "constr derivata1" << std::endl;
     }
-    ~Derivata1() {
+
+    ~Derivata1() override {
         std::cout << "destructor derivata1" << std::endl;
         delete ptr2;
     }
+
     void f() override {
         std::cout << "f derivata1" << std::endl;
     }
+
     void functiaMeaSpecialaCareNuEsteInNaza() {
         std::cout << "g derivata1" << std::endl;
     }
 };
+
 class Derivata2 : public Baza {
 public:
-
     void f() override {
         std::cout << "f derivata2" << std::endl;
     }
+
     void g() {
         std::cout << "g derivata2" << std::endl;
     }
 };
+
 class Derivata3 : public Baza {
 public:
     void f() override {
         std::cout << "f derivata3" << std::endl;
     }
+
     void g() {
         std::cout << "g derivata3" << std::endl;
     }
 };
+
 class Derivata4 : public Baza {
 public:
     void f() override {
         std::cout << "f derivata4" << std::endl;
     }
 };
+
 //
 // void f1(Baza b) {
 //     std::cout << "f1" << std::endl;
@@ -205,14 +230,15 @@ public:
 //     std::cout << "---------" << std::endl;
 // }
 
-void f2(Baza* b) {
+void f2(Baza *b) {
     std::cout << "f2" << std::endl;
     b->f();
     // b->g();
     // b->h();
     std::cout << "---------" << std::endl;
 }
-void f3(Baza& b) {
+
+void f3(Baza &b) {
     std::cout << "f3" << std::endl;
     b.f();
     // b.g();
@@ -220,18 +246,19 @@ void f3(Baza& b) {
 }
 
 
-
 int main() {
     // Baza b1;
     Derivata1 d;
     //std::cout << d << std::endl;
-    Baza& ref = d;
+    Baza &ref = d;
     std::cout << ref << std::endl;
     // return 0;
     // Baza b;
     Derivata1 d1;
     Derivata2 d2;
     Derivata3 d3;
+    d.functiaMeaSpecialaCareNuEsteInNaza();
+    d.f_ok();
     // f1(b);
     // f1(d1);
     // f1(d2);
@@ -246,8 +273,14 @@ int main() {
     f3(d3);
     StudentLicenta sl1("John", 1);
     StudentLicenta sl2("John", 1);
+    sl1.distreaza();
+    sl1.invata();
+    sl2.distreaza();
     StudentMaster sm1("John", 1);
     StudentMaster sm2("John", 1);
+    sm1.lucreaza();
+    sm1.invata();
+    sm2.lucreaza();
     Student st1{"abc", 131, true}, st2(st1), st3(st2);
     Profesor p1("abc", 1);
     Facultate f1("fmi", {st1}, {p1});
