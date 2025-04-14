@@ -5,6 +5,9 @@
 #include <ostream>
 #include <vector>
 
+#include <indicators.hpp>
+#include <rlutil.h>
+
 class Student {
     std::string nume;
     int grupa;
@@ -247,6 +250,60 @@ void f3(Baza &b) {
 
 
 int main() {
+    int counter = 0;
+    rlutil::hidecursor();
+    std::cin.sync_with_stdio(false);
+    using namespace indicators;
+    std::thread progress_thread{
+        [&]() {
+            ProgressBar bar{
+                option::BarWidth{50},
+                option::Start{"["},
+                option::Fill{"="},
+                option::Lead{">"},
+                option::Remainder{" "},
+                option::End{"]"},
+                option::PostfixText{"Extracting Archive"},
+                option::ForegroundColor{Color::green},
+                option::FontStyles{std::vector<FontStyle>{FontStyle::bold}}
+            };
+
+            // Update bar state
+            while (true) {
+                // rlutil::cls();
+                rlutil::locate(1, 5);
+                bar.set_progress(counter);
+                // indicators::move_up(2);
+                rlutil::locate(1, 1);
+                // while (std::c1in.get() != '\n') { rlutil::getkey(); }
+                // std::cout << std::endl << std::flush;
+                // bar.tick();
+                if (bar.is_completed())
+                    break;
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            }
+        }
+    };
+    while (true) {
+        // std::cout << std::flush;
+        rlutil::cls();
+        rlutil::locate(1, 1);
+        // while (std::cin.get() != '\n') { getch(); }
+        // indicators::move_up(2);
+        // std::cout << std::endl << std::flush;
+        // rlutil::locate(1, 2);
+        std::cout << "counter:\nabcdef\n";
+        std::cin >> counter;
+        indicators::move_down(1);
+        std::cout << "altceva\n";
+        std::cout << std::flush;
+        if (counter >= 100)
+            break;
+    }
+    progress_thread.join();
+    rlutil::showcursor();
+
+    return 0;
     // Baza b1;
     Derivata1 d;
     //std::cout << d << std::endl;
