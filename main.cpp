@@ -5,6 +5,9 @@
 #include <ostream>
 #include <vector>
 
+#include <indicators.hpp>
+#include <rlutil.h>
+
 class Student {
     std::string nume;
     int grupa;
@@ -150,10 +153,33 @@ public:
         ptr = new int;
     }
 
-protected:
-    Baza(const Baza &other) = default;
+    virtual Baza *clone() const = 0;
 
-    Baza &operator=(const Baza &other) = default;
+protected:
+    Baza(const Baza &other) : ptr(new int(*other.ptr)), q(other.q), abc(other.abc) {
+    }
+
+    Baza &operator=(const Baza &other) {
+        if (this == &other)
+            return *this;
+        auto *copie = other.clone();
+        // std::swap(*ptr, *copie->ptr);
+        // std::swap(q, copie->q);
+        // std::swap(abc, copie->abc);
+        swap(*this, *copie);
+
+        // *ptr = *other.ptr;
+        // q = other.q;
+        // abc = other.abc;
+        return *this;
+    }
+
+    friend void swap(Baza &lhs, Baza &rhs) noexcept {
+        using std::swap;
+        swap(lhs.ptr, rhs.ptr);
+        swap(lhs.q, rhs.q);
+        swap(lhs.abc, rhs.abc);
+    }
 
 private:
     void f_baza() {
@@ -174,6 +200,10 @@ public:
         os << " d1: " << d1 << "\n";
     }
 
+    Derivata1 *clone() const override {
+        return new Derivata1(*this);
+    }
+
     Derivata1() {
         ptr2 = new int;
         std::cout << "constr derivata1" << std::endl;
@@ -191,10 +221,30 @@ public:
     void functiaMeaSpecialaCareNuEsteInNaza() {
         std::cout << "g derivata1" << std::endl;
     }
+
+    Derivata1(const Derivata1 &other) : Baza(other), ptr2(new int(*other.ptr2)), d1(other.d1) {
+    }
+
+    Derivata1 &operator=(const Derivata1 &other) {
+        if (this == &other)
+            return *this;
+        auto *copie = other.clone();
+        swap(*this, *copie);
+        return *this;
+    }
+
+    friend void swap(Derivata1 &lhs, Derivata1 &rhs) noexcept {
+        using std::swap;
+        swap(static_cast<Baza &>(lhs), static_cast<Baza &>(rhs));
+        swap(lhs.ptr2, rhs.ptr2);
+        swap(lhs.d1, rhs.d1);
+    }
 };
 
 class Derivata2 : public Baza {
 public:
+    Derivata2 *clone() const override { return new Derivata2(*this); }
+
     void f() override {
         std::cout << "f derivata2" << std::endl;
     }
@@ -206,6 +256,8 @@ public:
 
 class Derivata3 : public Baza {
 public:
+    Derivata3 *clone() const override { return new Derivata3(*this); }
+
     void f() override {
         std::cout << "f derivata3" << std::endl;
     }
@@ -217,6 +269,8 @@ public:
 
 class Derivata4 : public Baza {
 public:
+    Derivata4 *clone() const override { return new Derivata4(*this); }
+
     void f() override {
         std::cout << "f derivata4" << std::endl;
     }
@@ -247,6 +301,46 @@ void f3(Baza &b) {
 
 
 int main() {
+    int counter = 0;
+    //rlutil::hidecursor();
+    //std::cin.sync_with_stdio(false);
+    using namespace indicators;
+    using namespace std::chrono_literals;
+    ProgressBar bar{
+        option::BarWidth{50},
+        option::Start{"["},
+        option::Fill{"="},
+        option::Lead{">"},
+        option::Remainder{" "},
+        option::End{"]"},
+        option::PostfixText{"Extracting Archive"},
+        option::ForegroundColor{Color::green},
+        option::FontStyles{std::vector<FontStyle>{FontStyle::bold}}
+    };
+
+    while (true) {
+        // std::cout << std::flush;
+        rlutil::cls();
+        rlutil::locate(1, 1);
+        // printing bar at the top should also work
+        // bar.set_progress(counter);
+        // rlutil::resetColor(); // do not keep colors from progress bar
+        std::cout << "\nceva" << std::endl << std::flush;
+        rlutil::setString("altceva\n");
+        std::cout << "whoa" << std::endl << std::flush;
+        rlutil::locate(1, 6);
+        bar.set_progress(counter);
+        rlutil::resetColor(); // do not keep colors from progress bar
+        std::this_thread::sleep_for(30ms);
+        if (counter >= 100)
+            break;
+        // input at the end
+        std::cout << "\ncounter: ";
+        std::cin >> counter;
+    }
+    // rlutil::showcursor();
+
+    // return 0;
     // Baza b1;
     Derivata1 d;
     //std::cout << d << std::endl;
