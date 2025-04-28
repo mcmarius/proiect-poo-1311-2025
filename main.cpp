@@ -221,14 +221,18 @@ public:
     void functiaMeaSpecialaCareNuEsteInNaza() {
         std::cout << "g derivata1" << std::endl;
     }
-    Derivata1(const Derivata1 &other) : Baza(other), ptr2(new int(*other.ptr2)), d1(other.d1) {}
+
+    Derivata1(const Derivata1 &other) : Baza(other), ptr2(new int(*other.ptr2)), d1(other.d1) {
+    }
+
     Derivata1 &operator=(const Derivata1 &other) {
         if (this == &other)
             return *this;
         auto *copie = other.clone();
         swap(*this, *copie);
     }
- friend void swap(Derivata1 &lhs, Derivata1 &rhs) noexcept {
+
+    friend void swap(Derivata1 &lhs, Derivata1 &rhs) noexcept {
         using std::swap;
         swap(static_cast<Baza &>(lhs), static_cast<Baza &>(rhs));
         swap(lhs.ptr2, rhs.ptr2);
@@ -335,7 +339,7 @@ int main() {
     }
     // rlutil::showcursor();
 
-    return 0;
+    // return 0;
     // Baza b1;
     Derivata1 d;
     //std::cout << d << std::endl;
