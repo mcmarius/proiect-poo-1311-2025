@@ -230,6 +230,7 @@ public:
             return *this;
         auto *copie = other.clone();
         swap(*this, *copie);
+        return *this;
     }
 
     friend void swap(Derivata1 &lhs, Derivata1 &rhs) noexcept {
