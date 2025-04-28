@@ -152,17 +152,17 @@ public:
         std::cout << "constr baza" << std::endl;
         ptr = new int;
     }
-    virtual Baza* clone() const = 0;
+
+    virtual Baza *clone() const = 0;
 
 protected:
     Baza(const Baza &other) : ptr(new int(*other.ptr)), q(other.q), abc(other.abc) {
-
     }
 
-    Baza &operator=(const Baza& other) {
+    Baza &operator=(const Baza &other) {
         if (this == &other)
             return *this;
-        auto* copie = other.clone();
+        auto *copie = other.clone();
         // std::swap(*ptr, *copie->ptr);
         // std::swap(q, copie->q);
         // std::swap(abc, copie->abc);
@@ -200,6 +200,10 @@ public:
         os << " d1: " << d1 << "\n";
     }
 
+    Derivata1* clone() const override {
+        return new Derivata1(*this);
+    }
+
     Derivata1() {
         ptr2 = new int;
         std::cout << "constr derivata1" << std::endl;
@@ -221,6 +225,8 @@ public:
 
 class Derivata2 : public Baza {
 public:
+    Derivata2* clone() const override {  return new Derivata2(*this); }
+
     void f() override {
         std::cout << "f derivata2" << std::endl;
     }
@@ -232,6 +238,8 @@ public:
 
 class Derivata3 : public Baza {
 public:
+    Derivata3* clone() const override { return new Derivata3(*this); }
+
     void f() override {
         std::cout << "f derivata3" << std::endl;
     }
@@ -243,6 +251,7 @@ public:
 
 class Derivata4 : public Baza {
 public:
+    Derivata4* clone() const override { return new Derivata4(*this); }
     void f() override {
         std::cout << "f derivata4" << std::endl;
     }
