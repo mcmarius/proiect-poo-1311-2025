@@ -200,7 +200,7 @@ public:
         os << " d1: " << d1 << "\n";
     }
 
-    Derivata1* clone() const override {
+    Derivata1 *clone() const override {
         return new Derivata1(*this);
     }
 
@@ -221,11 +221,24 @@ public:
     void functiaMeaSpecialaCareNuEsteInNaza() {
         std::cout << "g derivata1" << std::endl;
     }
+    Derivata1(const Derivata1 &other) : Baza(other), ptr2(new int(*other.ptr2)), d1(other.d1) {}
+    Derivata1 &operator=(const Derivata1 &other) {
+        if (this == &other)
+            return *this;
+        auto *copie = other.clone();
+        swap(*this, *copie);
+    }
+ friend void swap(Derivata1 &lhs, Derivata1 &rhs) noexcept {
+        using std::swap;
+        swap(static_cast<Baza &>(lhs), static_cast<Baza &>(rhs));
+        swap(lhs.ptr2, rhs.ptr2);
+        swap(lhs.d1, rhs.d1);
+    }
 };
 
 class Derivata2 : public Baza {
 public:
-    Derivata2* clone() const override {  return new Derivata2(*this); }
+    Derivata2 *clone() const override { return new Derivata2(*this); }
 
     void f() override {
         std::cout << "f derivata2" << std::endl;
@@ -238,7 +251,7 @@ public:
 
 class Derivata3 : public Baza {
 public:
-    Derivata3* clone() const override { return new Derivata3(*this); }
+    Derivata3 *clone() const override { return new Derivata3(*this); }
 
     void f() override {
         std::cout << "f derivata3" << std::endl;
@@ -251,7 +264,8 @@ public:
 
 class Derivata4 : public Baza {
 public:
-    Derivata4* clone() const override { return new Derivata4(*this); }
+    Derivata4 *clone() const override { return new Derivata4(*this); }
+
     void f() override {
         std::cout << "f derivata4" << std::endl;
     }
