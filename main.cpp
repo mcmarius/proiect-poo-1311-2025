@@ -152,11 +152,34 @@ public:
         std::cout << "constr baza" << std::endl;
         ptr = new int;
     }
+    virtual Baza* clone() const = 0;
 
 protected:
-    Baza(const Baza &other) = default;
+    Baza(const Baza &other) : ptr(new int(*other.ptr)), q(other.q), abc(other.abc) {
 
-    Baza &operator=(const Baza &other) = default;
+    }
+
+    Baza &operator=(const Baza& other) {
+        if (this == &other)
+            return *this;
+        auto* copie = other.clone();
+        // std::swap(*ptr, *copie->ptr);
+        // std::swap(q, copie->q);
+        // std::swap(abc, copie->abc);
+        swap(*this, *copie);
+
+        // *ptr = *other.ptr;
+        // q = other.q;
+        // abc = other.abc;
+        return *this;
+    }
+
+    friend void swap(Baza &lhs, Baza &rhs) noexcept {
+        using std::swap;
+        swap(lhs.ptr, rhs.ptr);
+        swap(lhs.q, rhs.q);
+        swap(lhs.abc, rhs.abc);
+    }
 
 private:
     void f_baza() {
